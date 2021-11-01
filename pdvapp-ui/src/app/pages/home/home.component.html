@@ -1,0 +1,1588 @@
+<app-navigation>
+
+    
+</app-navigation>
+
+<div class="col-md-6 col-md-offset-3 forma">
+    
+  
+        <div >
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2" >Kompanija</label>
+                    <select required  [formControl]="country" class="form-control"  id="exampleFormControlSelect2" (change)="getBukrs(country.value)">
+                    <option  *ngFor="let z of comps"  [value]="z.companyCode" class="form-control" >
+                        {{ z.companyName }}
+                    </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">Godina</label>
+                    <select (change)="onChangeGodina($event.target.value)" name="" id="" class="form-control" [formControl]="year">
+                        <option value="2021" class="form-control">2021</option>
+                        <option value="2020" class="form-control">2020</option>
+                        <option value="2019" class="form-control">2019</option>
+                    </select>
+                </div>
+               
+                <div class="form-group" *ngIf="poreskiHide && !onlyPDV"> <!--odabrano 2019 ili 2020-->
+                    <label for="">Tip</label>
+                    <select id="" class="form-control" [formControl]="type">
+                        <option value="PDV" class="form-control">PDV</option>
+                        <option value="drugo" class="form-control">Poreski bilans</option>
+                        <option value="PORESKI_GUBICI" class="form-control">Poreski gubici</option>
+                        <option value="KAPITALNI_PORESKI_GUBICI" class="form-control">Kapitalni poreski gubici</option>
+                        <option value="PORESKI_KREDITI" class="form-control">Poreski krediti</option>
+                    </select>
+                </div>
+                <!--
+                <div class="form-group" *ngIf="poreskiHide && !onlyPDV">  2018 ili 2017 je odabrano 
+                    <label for="">Tip</label>
+                    <select  id="" class="form-control" [formControl]="type">
+                        <option value="PDV" class="form-control">PDV</option>
+                        <option value="PORESKI_GUBICI" class="form-control">Poreski gubici</option>
+                        <option value="KAPITALNI_PORESKI_GUBICI" class="form-control">Kapitalni poreski gubici</option>
+                        <option value="PORESKI_KREDITI" class="form-control">Poreski krediti</option>
+                    </select>
+                </div>
+                -->
+                <div class="form-group" *ngIf="onlyPDV && !poreskiHide">
+                    <label for="">Tip</label>
+                    <select id="" class="form-control" [formControl]="type">
+                        <option value="PDV" class="form-control">PDV</option>
+                    </select>
+                </div>
+
+                <div *ngIf="dobavio" class="form-group">
+                    <p style="color: green"> Poslednja izmena: {{ dobavioMessage }}</p>
+                    <p style="color: green"> Datum poslednje izmene: {{ dobavioDatum }}</p>
+                </div>
+                <div class="form-group">
+                    <p *ngIf="msg" style="color: red">{{ msgText }}</p>
+                </div>
+                 <div class="form-group" style="text-align: center;margin: 0 auto;">
+                    <button class="btn btn-info"  (click)="getData()">Odabir</button>
+                </div>
+
+         </div >
+         
+</div>
+<div class="" *ngIf="showTable">
+
+    <div class="tabela">
+        <div class="col-xl-auto">
+            <table class="table table-bordered table-hover main-table">
+                <thead>
+    
+                  <tr>
+                    <th>
+                        PDV - aps. iznos RSD
+                    </th>
+                    <th>
+                        Obaveza za PDV - polje 105 PPPDV
+                    </th>
+                    <th>
+                        Prethodni PDV - polje 109 PPPDV
+                    </th>
+                    <th>
+                        Iznos PDV u poreskom periodu - polje 110 PPPDV    
+                    </th>
+                    <!--<th scope="col" *ngFor="let month of months">{{month}}</th>-->
+                  </tr>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                       Januar
+                    </th>
+                    <td style="text-align: center !important;">
+                        <input  type="text" (focusout)="processMyValue(pdv1januar)" class="form-control" name="" [formControl]="pdv1januar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv2januar)" class="form-control" name="" [formControl]="pdv2januar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv3januar)" class="form-control" disabled name="" [formControl]="pdv3januar">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Februar
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv1februar)" class="form-control" name="" [formControl]="pdv1februar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv2februar)" class="form-control" name="" [formControl]="pdv2februar">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv3februar)" class="form-control" disabled name="" [formControl]="pdv3februar" >
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Mart
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv1mart)" class="form-control"  name="" [formControl]="pdv1mart" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2mart)" class="form-control" name="" [formControl]="pdv2mart" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"   (focusout)="processMyValue(pdv3mart)" class="form-control" disabled name="" [formControl]="pdv3mart" >
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       April
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv1april)" class="form-control"  name="" [formControl]="pdv1april" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv2april)" class="form-control" name="" [formControl]="pdv2april" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv3april)" class="form-control" disabled name="" [formControl]="pdv3april" >
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Maj
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv1maj)" class="form-control"  name="" [formControl]="pdv1maj" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv2maj)" class="form-control" name="" [formControl]="pdv2maj" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv3maj)" class="form-control" disabled name="" [formControl]="pdv3maj" >
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Jun
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv1jun)" class="form-control"  name="" [formControl]="pdv1jun">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2jun)" class="form-control" name="" [formControl]="pdv2jun" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv3jun)" class="form-control" disabled name="" [formControl]="pdv3jun">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Jul
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"   (focusout)="processMyValue(pdv1jul)" class="form-control"  name="" [formControl]="pdv1jul">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2jul)" class="form-control" name="" [formControl]="pdv2jul" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv3jul)" class="form-control" disabled name="" [formControl]="pdv3jul">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Avgust
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv1avgust)" class="form-control"  name="" [formControl]="pdv1avgust">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2avgust)" class="form-control" name="" [formControl]="pdv2avgust" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(pdv3avgust)" class="form-control" disabled name="" [formControl]="pdv3avgust">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Septembar
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv1septembar)" class="form-control"  name="" [formControl]="pdv1septembar">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2septembar)" class="form-control" name="" [formControl]="pdv2septembar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv3septembar)" class="form-control" disabled name="" [formControl]="pdv3septembar">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Oktobar
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv1oktobar)" class="form-control"  name="" [formControl]="pdv1oktobar">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2oktobar)" class="form-control" name="" [formControl]="pdv2oktobar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv3oktobar)" class="form-control" disabled name="" [formControl]="pdv3oktobar">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Novembar
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv1novembar)" class="form-control"  name="" [formControl]="pdv1novembar">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2novembar)" class="form-control" name="" [formControl]="pdv2novembar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv3novembar)" class="form-control" disabled name="" [formControl]="pdv3novembar">
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                       Decembar
+                    </th>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv1decembar)" class="form-control"  name="" [formControl]="pdv1decembar">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv2decembar)" class="form-control" name="" [formControl]="pdv2decembar" >
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  (focusout)="processMyValue(pdv3decembar)" class="form-control" disabled name="" [formControl]="pdv3decembar">
+                    </td>
+                  </tr>
+<!--
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1februar" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1mart" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1april" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1maj" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1jun" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1jul" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1avgust" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1septembar" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1oktobar" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1novembar" style="width:  140px;margin-top: 20px;">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" [formControl]="pdv1decembar" style="width:  140px;margin-top: 20px;">
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                        
+                    </th>
+                    
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2januar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2februar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2mart" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2april" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2maj" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2jun" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2jul" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2avgust" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2septembar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2oktobar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2novembar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" name="" [formControl]="pdv2decembar" style="width:  140px;margin-top: 20px;">
+                        </td>
+    
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                        
+                    </th>
+                   
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3januar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3februar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3mart" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3april" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3maj" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3jun" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3jul" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3avgust" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3septembar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3oktobar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3novembar" style="width:  140px;margin-top: 20px;">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="text" class="form-control" disabled name="" [formControl]="pdv3decembar" style="width:  140px;margin-top: 20px;">
+                        </td>
+    
+                    
+                    
+                    
+                  </tr>
+                  -->
+                </tbody>
+              </table>
+         </div>
+  
+    </div>
+    <div style="text-align: center;" *ngIf="showTable">
+        <button class="btn btn-info mt-4 mr-2 mb-4" (click)="sumAll()">Izračunaj</button>
+        <button class="btn mt-4 mr-2 mb-4" (click)="save()">Snimi</button>
+    </div>
+</div>
+
+
+<div *ngIf="showTable2">
+    <div class="tabela" id="tab2">
+        <div class="col-xl-auto">
+            <table class="table table-bordered table-hover main-table table-porez">
+                <thead>
+    
+                  <tr>
+                    <th>
+                       Redni broj
+                    </th>
+                    <th scope="col">
+                        Pozicija
+                    </th>
+                    <th scope="col">
+                        RSD apsolutni iznos
+                    </th>
+                  </tr>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align: center; width: 5% !important;">
+                        1
+                    </td>
+                    <td style="text-align: left;" class="mid-col">
+                        Dobitak poslovne godine
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(p1)" class="form-control" name="" [formControl]="p1" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        2
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Prihod ogranka nerezidentnog pravnog lica koji se ne oporezuje shodno potvrđenom međunarodnom ugovoru; prihod ogranka nerezidentnog pravnog lica iz jurisdikcije sa preferencijalnim poreskim sistemom iz člana 40. stav 12. i 13. Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(p2)" class="form-control" name="" [formControl]="p2" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        3
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Gubitak poslovne godine
+
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" (focusout)="processMyValue(p3)" class="form-control" name="" [formControl]="p3" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        4
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Dobici od prodaje imovine
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p4)" [formControl]="p4" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        5
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Gubici od prodaje imovine
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p5)" [formControl]="p5" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        6
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Troškovi koji nisu dokumentovani
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p6)" [formControl]="p6" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        7
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ispravke vrednosti pojedinačnih potraživanja od lica kome se istovremeno duguje, do iznosa obaveze prema tom licu
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p7)" [formControl]="p7" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        8
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Pokloni i prilozi dati političkim organizacijama
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p8)" [formControl]="p8" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        9
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Pokloni čiji je primalac povezano lice
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p9)" [formControl]="p9" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        10
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Kamate zbog neblagovremeno plaćenih poreza, doprinosa i drugih javnih dažbina
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p10)" [formControl]="p10" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        11
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Troškovi postupka prinudne naplate poreza i drugih dugovanja, troškovi poresko-prekršajnog i drugih prekršajnih postupaka koji se vode pred nadležnim organom
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p11)" [formControl]="p11" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        12
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Novčane kazne, ugovorne kazne i penali
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p12)" [formControl]="p12" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        13
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Zatezne kamate između povezanih lica
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p13)" [formControl]="p13" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        14
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Troškovi koji nisu nastali u svrhu obavljanja poslovne delatnosti
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p14)" [formControl]="p14" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        15
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Troškovi materijala i nabavna vrednost prodate robe iznad iznosa obračunatog primenom metode ponderisane prosečne cene ili FIFO metode
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p15)" [formControl]="p15" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        16
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Primanja zaposlenog iz člana 9. stav 2. Zakona, obračunata a neisplaćena u poreskom periodu
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p16)" [formControl]="p16" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        17
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Otpremnine i novčane naknade po osnovu prestanka radnog odnosa, obračunate a neisplaćene u poreskom periodu
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p17)" [formControl]="p17" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        18
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Primanja zaposlenog iz člana 9. stav 2. Zakona, obračunata u prethodnom poreskom periodu,a isplaćena u poreskom periodu za koji se podnosi poreski bilans
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p18)" [formControl]="p18" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        19
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Otpremnine i novčane naknade po osnovu prestanka radnog odnosa koje su obračunate u prethodnom a isplaćene u poreskom periodu za koji se podnosi poreski bilans
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p19)" [formControl]="p19" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        20
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ukupan iznos amortizacije obračunat u finansijskim izveštajima
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p20)" [formControl]="p20" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        21
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ukupan iznos amortizacije koji se priznaje za poreske svrhe
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p21)" [formControl]="p21" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        22
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Izdaci za zdravstvene, obrazovne, naučne, humanitarne, verske i sportske namene, zaštitu životne sredine, davanja učinjena ustanovama, odnosno pružaocima usluga socijalne zaštite, kao i za humanitarnu pomoć za otklanjanje posledica nastalih u slučaju vanredne situacije,  koji su učinjeni Republici, autonomnoj pokrajini, jedinici lokalne samouprave
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p22)" [formControl]="p22" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        23
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Izdaci za ulaganja u oblasti kulture
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name=""  (focusout)="processMyValue(p23)"  [formControl]="p23" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        24
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Članarine komorama, savezima i udruženjima
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p24)"  [formControl]="p24" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        25
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Rashodi po osnovu reprezentacije
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p25)"  [formControl]="p25" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        26
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Rashod po osnovu ispravke vrednosti pojedinačnih potraživanja ako od roka za njihovu naplatu nije prošlo najmanje 60 dana, kao i otpis vrednosti pojedinačnih potraživanja izvršen bez prethodno ispunjenih uslova iz člana 16., odnosno člana 22a Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p26)"  [formControl]="p26" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        27
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Rashodi po osnovu ispravke vrednosti pojedinačnih potraživanja koji nije bio priznat u poreskom periodu u kojem je iskazan, ali se priznaje naknadno u skladu sa članom 16. Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p27)"  [formControl]="p27" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        28
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Troškovi koje ogranak nerezidentnog obveznika iskazuje u skladu sa članom 20. Zakona; rashod ogranka nerezidentnog pravnog lica u vezi sa prihodom koji se ne oporezuje shodno potrvđenom međunarodnom ugovoru; rashod ogranka nerezidentnog pravnog lica iz jurisdikcije sa preferencijalnom kamatnom stopom iz člana 40. stav 12. i 13. Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p28)"  [formControl]="p28" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        29
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Porezi, doprinosi, takse i druge javne dažbine koje ne zavise od rezultata poslovanja i nisu plaćene u poreskom periodu, a   po osnovu kojih je u poslovnim knjigama obveznika iskazan rashod
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p29)"  [formControl]="p29" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        30
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Porezi, doprinosi, takse i druge javne dažbine koje ne zavise od rezultata poslovanja, plaćene u poreskom periodu, a koje nisu bile plaćene u prethodnom poreskom periodu u kome je po tom osnovu u poslovnim knjigama obveznika bio iskazan rashod
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p30)"  [formControl]="p30" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        31
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Rashod banke po osnovu ispravke vrednosti potraživanja bilansne aktive i rezervisanja za gubitke po vanbilansnim stavkama, u iznosu koji se ne priznaje u skladu sa članom 22a  Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p31)" [formControl]="p31" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        32
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Dugoročna rezervisanja koja se ne priznaju u poreskom bilansu
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p32)" [formControl]="p32" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        33
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Dugoročna rezervisanja u iznosu koji je iskorišćen u poreskom periodu
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p33)" [formControl]="p33" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        34
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Rashodi po osnovu obezvređenja imovine
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p34)" [formControl]="p34" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        35
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Rashodi po osnovu obezvređenja imovine koji se priznaju u poreskom periodu za koji se podnosi poreski bilans, a u kome je ta imovina otuđena, upotrebljena ili je došlo do oštećenja te imovine usled više sile; rashodi nastali po osnovu efekata promene računovodstvene politike, usled prve primene MRS, odnosno MSFI i MSFI za MSP
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p35)" [formControl]="p35" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        36
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        roškovi istraživanja i razvoja koji se priznaju u dvostrukom iznosu u skladu sa članom 22g Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p36)" [formControl]="p36" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        37
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Porez na dobit pravnih lica koji je u drugoj državi platila nerezidentna filijala rezidentnog matičnog pravnog lica
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p37)" [formControl]="p37" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        38
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Porez po odbitku na dividende koji je u drugoj državi platila nerezidentna filijala rezidentnog matičnog pravnog lica
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p38)" [formControl]="p38" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        39
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Porez po odbitku na kamate, autorske naknade, naknade po osnovu zakupa nepokretnosti i pokretnih stvari i dividende koje ne ispunjavaju uslove za poreski kredit po članu 52. Zakona, plaćen u drugoj državi
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p39)" [formControl]="p39" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        40
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Porez na kapitalni dobitak plaćen u drugoj državi	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p40)" [formControl]="p40" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        41
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ispravke vrednosti pojedinačnih potraživanja koje su bile priznate na teret rashoda, a za koje, u poreskom periodu u kome se vrši otpis, nisu ispunjeni uslovi iz člana 16. Zakona
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p41)"  [formControl]="p41" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        42
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Sva otpisana ispravljena i druga potraživanja koja su bila priznata kao rashod, a koja se u poreskom periodu uključuju u oporezive prihode koji nisu, kao takvi, iskazani u poslovnim knjigama obveznika; prihodi nastali po osnovu efekata promene računovodstvene poliktike usled prve primene MRS, odnosno MSFI i MSFI za MSP	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p42)"  [formControl]="p42" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        43
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Iznos koji se, po osnovu smanjenja procenta korišćenja stalnih sredstava za svrhe istraživanje i razvoja, uključuje u poresku osnovicu
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p43)"  [formControl]="p43" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                 <tr>
+                    <td style="text-align: center;">
+                        44
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Iznos koji se uključuje u poresku osnovicu u poreskom periodu u kojem je prijava u vezi sa pronalaskom odbačena od strane nadležnog organa
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p44)"  [formControl]="p44" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        45
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Prihodi ostvareni u poreskom periodu po osnovu otpisanih, ispravljenih i drugih potraživanja koja nisu bila priznata kao rashod, a koja se u poreskom periodu ne uključuju u oporezive prihode	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p45)"  [formControl]="p45" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        46
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Prihod po osnovu dividendi i udela u dobiti od drugog rezidentnog obveznika
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p46)"  [formControl]="p46" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        47
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Prihodi od kamata po osnovu dužničkih hartija od vrednosti čiji je izdavalac Republika, autonomna pokrajina, jedinica lokalne samouprave ili NBS
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p47)"  [formControl]="p47" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        48
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Prihodi po osnovu neiskorišćenih dugoročnih rezervisanja koja nisu bila priznata kao rashod u poreskom periodu u kome su izvršena; prihodi nastali po osnovu sticanja ne novčane imovine u postupku realizacije ugovora o koncesiji	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p48)"  [formControl]="p48" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        49
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Prihodi nastali u vezi sa rashodima koji nisu bili priznati; prihodi nastali po osnovu smanjenja obaveza prema korisnicima javnih sredstava, bankama u stečaju i privrednim komorama, koje su obuhvaćene UPPR-om
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p49)"  [formControl]="p49" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        50
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Iznos kvalifikovanog prihoda koji se, u skladu sa članom 25b Zakona, ne uključuje u poresku osnovicu	
+                        V. Rashodi i prihodi po osnovu transfernih cena (osim kamata na zajmove, odnosno kredite)
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p50)"  [formControl]="p50" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        51
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Obračunati troškovi po osnovu transfernih cena
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p51)" [formControl]="p51" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        52
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Obračunati troškovi po osnovu transfernih cena za koje se podnosi izveštaj u skraćenom obliku
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p52)" [formControl]="p52" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        53
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Obračunati prihodi po osnovu transfernih cena
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p53)" [formControl]="p53" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        54
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Obračunati prihodi po osnovu transfernih cena za koje se podnosi izveštaj u skraćenom obliku
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p54)" [formControl]="p54" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        55
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Obračunati rashodi po osnovu kamata („na dohvat ruke”) na zajmove, odnosno kredite dobijene od povezanih lica
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p55)" [formControl]="p55" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        56
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Obračunati prihodi po osnovu kamata („na dohvat ruke”) na zajmove, odnosno kredite odobrene povezanim licima	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p56)" [formControl]="p56" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        57
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Zbir konačnih korekcija (rashoda i prihoda) po osnovu transakcija sa svim pojedinačnim povezanim licima utvrđen u zaključku dokumentacije o transfernim cenama
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p57)" [formControl]="p57" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        58
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Kamata i pripadajući troškovi na zajam, odnosno kredit iznad nivoa četvorostruke (desetostruke) vrednosti obveznikovog sopstvenog kapitala (red. br. 13. Obrasca OK)
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p58)" [formControl]="p58" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        59
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Dobit  (1-2-4+5 do 17-18-19+20-21+22 do 26-27+28+29-30+31+32-33+34-35-36+37 do 44-45 do 50+57+58)>0 (ili negativan iznos sa rednog broja 60)	0.00 
+                    </td>
+                    <td style="text-align: center;">
+                        <input  type="text" class="form-control" (focusout)="processMyValue(p59)" name="" [formControl]="p59" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        60
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Gubitak (3+2+4-5 do 17+18+19-20+21-22 do 26+27-28-29+30-31-32+33-34+35+36-37 do 44+45 do 50-57-58)>0 (ili negativan iznos sa rednog broja 59)
+                    </td>
+                    <td style="text-align: center;">
+                        <input  type="text" class="form-control" (focusout)="processMyValue(p60)" name="" [formControl]="p60" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        61
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Iznos gubitka iz poreskog bilansa iz prethodnih godina, do visine oporezive dobiti
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p61)" [formControl]="p61" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        62
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ostatak oporezive dobiti (59-61)>0	0.00 B. Kapitalni dobici i gubici
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  class="form-control" (focusout)="processMyValue(p62)" name="" [formControl]="p62" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        63
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ukupni kapitalni dobici tekuće godine obračunati u skladu sa Zakonom 	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p63)" [formControl]="p63" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        64
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ukupni kapitalni gubici tekuće godine obračunati u skladu sa Zakonom	
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p64)" [formControl]="p64" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        65
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Kapitalni dobici (63-64)>0	0.00
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  class="form-control" name="" (focusout)="processMyValue(p65)" [formControl]="p65" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        66
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Kapitalni gubici (64-63)>0	0.00
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  class="form-control" name="" (focusout)="processMyValue(p66)" [formControl]="p66" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        67
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Preneti kapitalni gubici iz ranijih godina do visine iznosa pod rednim brojem 65
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text" class="form-control" name="" (focusout)="processMyValue(p67)" [formControl]="p67" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        68
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Ostatak kapitalnog dobitka (65-67)>0	0.00 
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  class="form-control" name="" (focusout)="processMyValue(p68)" [formControl]="p68" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        69
+                    </td>
+                    <td style="text-align:left;" class="mid-col">
+                        Poreska osnovica - opreziva dobit (62+68)>0	0.00 
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="text"  class="form-control" name=""  (focusout)="processMyValue(p69)" [formControl]="p69" style="width: 100% !important;margin-top: 20px;">
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+</div>
+</div>
+</div>
+<div style="text-align: center;" *ngIf="showTable2">
+    <!--<button class="btn btn-info mt-4 mr-2 mb-4" (click)="sumAll2()">Popuni sva polja</button>-->
+    <button class="btn mt-4 mr-2 mb-4" (click)="save2()">Snimi</button>
+</div>
+<div *ngIf="showTablePoreskiGubici">
+    <div class="tabela">
+        <div class="col-xl-auto">
+            <table class="table table-bordered table-hover main-table">
+                <thead>
+                    <tr>
+                        <th>
+                            Godina nastanka
+                        </th>
+                        <th>
+                            Godina isteka
+                        </th>
+                        <th>
+                            RSD apsolutni iznos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            2014.
+                        </td>
+                        <td>
+                            2019.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg1)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2015.
+                        </td>
+                        <td>
+                            2020.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg2)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2016.
+                        </td>
+                        <td>
+                            2021.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg3)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg3">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2017.
+                        </td>
+                        <td>
+                            2022.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg4)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2018.
+                        </td>
+                        <td>
+                            2023.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg5)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2019.
+                        </td>
+                        <td>
+                            2024.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg6)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg6">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2020.
+                        </td>
+                        <td>
+                            2025.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pg7)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pg7">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center;" *ngIf="showTablePoreskiGubici">
+    <button class="btn mt-4 mr-2 mb-4" (click)="saveDataForPG()">Snimi</button>
+</div>
+
+<div *ngIf="showTableKapitalniPoreskiGubici">
+    <div class="tabela">
+        <div class="col-xl-auto">
+            <table class="table table-bordered table-hover main-table">
+                <thead>
+                    <tr>
+                        <th>
+                            Godina nastanka
+                        </th>
+                        <th>
+                            Godina isteka
+                        </th>
+                        <th>
+                            RSD apsolutni iznos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            2014.
+                        </td>
+                        <td>
+                            2019.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg1)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2015.
+                        </td>
+                        <td>
+                            2020.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg2)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2016.
+                        </td>
+                        <td>
+                            2021.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg3)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg3">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2017.
+                        </td>
+                        <td>
+                            2022.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg4)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2018.
+                        </td>
+                        <td>
+                            2023.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg5)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2019.
+                        </td>
+                        <td>
+                            2024.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg6)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg6">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2020.
+                        </td>
+                        <td>
+                            2025.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(kpg7)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="kpg7">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center;" *ngIf="showTableKapitalniPoreskiGubici">
+    <button class="btn mt-4 mr-2 mb-4" (click)="saveDataForKPG()" >Snimi</button>
+</div>
+
+<div *ngIf="showTablePoreskiKrediti">
+    <div class="tabela">
+        <div class="col-xl-auto">
+            <table class="table table-bordered table-hover main-table">
+                <thead>
+                    <tr>
+                        <th>
+                            Godina nastanka
+                        </th>
+                        <th>
+                            Godina isteka
+                        </th>
+                        <th>
+                            RSD apsolutni iznos
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            2009.
+                        </td>
+                        <td>
+                            2019.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pk1)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pk1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2010.
+                        </td>
+                        <td>
+                            2020.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pk2)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pk2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2011.
+                        </td>
+                        <td>
+                            2021.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pk3)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pk3">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2012.
+                        </td>
+                        <td>
+                            2022.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pk4)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pk4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2013.
+                        </td>
+                        <td>
+                            2023.
+                        </td>
+                        <td>
+                            <input 
+                            type="text" 
+                            (focusout)="processMyValue(pk5)" 
+                            class="form-control" 
+                            name="" 
+                            [formControl]="pk5">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center;" *ngIf="showTablePoreskiKrediti">
+    <button class="btn mt-4 mr-2 mb-4" (click)="saveDataForPK()">Snimi</button>
+</div>

@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: ${APPNAME:pdvapp}
+server:
+  port: ${PORT:8087}
+auth:
+  app:
+    jwtSecret: testingsecurity
+    jwtExpiration: 86400
+---
+spring:
+  profiles:
+    default: prd
+  datasource:
+    url: jdbc:mysql://localhost:3306/pdvapp?useSSL=false&createDatabaseIfNotExist=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
+    #initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC+1
+        show_sql: true
+        dialect: org.hibernate.dialect.MySQL55Dialect

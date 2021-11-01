@@ -1,0 +1,54 @@
+.navigationcl {
+    background-color: #3d3d3d !important;
+    color: white;
+}
+
+/* You can add global styles to this file, and also import other style files */
+html, body {
+    background-color: #565555 !important;
+    font-family: "Gotham", "Montserrat", sans-serif !important;
+    color: #ccad60;
+}
+
+   
+button {
+    border-radius: 0px;
+    background-color: #a07945;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    min-width: 100px;
+    padding: 15px;
+    -moz-transition: background-color 0.3s ease;
+    -o-transition: background-color 0.3s ease;
+    -webkit-transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s ease;
+    background-color: #17a2b8;
+
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: default !important;
+}
+
+th, td{
+    text-align: center;
+}
+
+h2{
+    margin-top: 0;
+    color: #ccad60;
+    width: 100%;
+    font-weight: bold;
+    font-family: "Gotham", "Montserrat", sans-serif !important;
+}

@@ -1,0 +1,117 @@
+
+.forma{
+    margin: 4vh auto !important;
+    text-align: left;
+    color: #a07945;
+    }
+    
+    .buttoncl {
+        border-radius: 0px;
+        background-color: #a07945;
+        color: #fff;
+        font-size: 15px;
+        border: none;
+        min-width: 100px;
+        padding: 15px;
+        -moz-transition: background-color 0.3s ease;
+        -o-transition: background-color 0.3s ease;
+        -webkit-transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease;
+    }
+    
+    .buttoncl:hover {
+        background-color: transparent !important;
+        border-bottom: 2px solid #a07945 !important;
+        cursor: pointer;
+    
+    }
+    
+    h2{
+        margin-top: 0;
+        color: #a07945;
+        width: 100%;
+        font-weight: bold;
+        font-family: "Gotham", "Montserrat", sans-serif !important;
+    }
+    
+    input[type=text] {
+        height: 45px !important;
+    
+    }
+    
+    /* You can add global styles to this file, and also import other style files */
+html, body {
+    background-color: #565555 !important;
+    font-family: "Gotham", "Montserrat", sans-serif !important;
+    color: #c2a97d;
+}
+
+   
+button {
+    border-radius: 0px;
+    background-color: #a07945;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    min-width: 100px;
+    padding: 15px;
+    -moz-transition: background-color 0.3s ease;
+    -o-transition: background-color 0.3s ease;
+    -webkit-transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease;
+}
+
+select {
+    background-color: #d1ccc4;
+    border: 2px solid #c2a97d;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s ease;
+
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: default !important;
+}
+
+th, td{
+    text-align: center !important;
+    color: #7c4a24 !important;
+    vertical-align: middle;
+    border: 1px solid #c2a97d !important;
+}
+
+td {
+    margin: 0 auto !important;
+}
+
+table {
+    color: #c2a97d !important;
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #c2a97d !important;
+}
+input {
+    text-align: center !important;
+}
+
+
+
+h2{
+    margin-top: 0;
+    color: #a07945;
+    width: 100%;
+    font-weight: bold;
+    font-family: "Gotham", "Montserrat", sans-serif !important;
+}
+   
+.mid-col {
+    width: 60%;
+}

@@ -1,0 +1,14 @@
+<form class="form-signin text-center mt-2 login" >
+    <img class="mb-4 img-fluid" src="../../../assets/correct.png" alt="" style="max-width:40%;max-height:40%" >
+    <h1 class="h3 mb-4 font-weight-normal">Platforma za poresko izveštavanje</h1>
+    <label for="inputEmail" class="sr-only mt-4">Korisničko ime</label>
+    <input  [(ngModel)]="form.username" #username="ngModel" type="email" id="inputEmail" class="form-control" name="username" placeholder="Korisničko ime" required autofocus>
+    <label for="inputPassword" class="sr-only">Lozinka</label>
+    <input name="password" [(ngModel)]="form.password" #password="ngModel" type="password" id="inputPassword" class="form-control" placeholder="Lozinka" required>
+    <p style="color: red" *ngIf="isLoginFailed">{{ errorMessage }}</p>
+    <button class="btn btn-info btn-block" id="loginButton" (click)="login()" type="submit">Prijava</button>
+    <br>
+    <br>
+    <p class="mt-5 mb-3">MK IT Business Solutions</p>
+    <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
+</form>
