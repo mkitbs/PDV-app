@@ -42,7 +42,7 @@ public class ExcelService {
 
 	public static final String TEMPLATE_FILE = "src/main/resources/templates/template123.xls";
 	public static final String TEMPLATE_FILE_2021 = "src/main/resources/templates/template1232021.xls";
-	public static final String TEMPLATE_FILE_2022 = "src/main/resources/templates/template1232021.xls";
+	public static final String TEMPLATE_FILE_2022 = "src/main/resources/templates/template1232022.xls";
 	public static final String TEMPLATE_FILE_TROSKOVI = "src/main/resources/templates/template123troskovi.xls";
 	public static final String TEMPLATE_FILE_PORESKI_GUBICI = "src/main/resources/templates/poreskigubici.xls";
 	public static final String TEMPLATE_FILE_PORESKI_KREDITI = "src/main/resources/templates/poreskikrediti.xls";
@@ -51,10 +51,10 @@ public class ExcelService {
 	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2020 = "src/main/resources/templates/poreskiGubici2020.xls";
 	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2020 = "src/main/resources/templates/poreskiKrediti2020.xls";
 	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2020 = "src/main/resources/templates/kapitalniPoreskiGubici2020.xls";
-	public static final String TEMPLATE_FILE_PORESKI_BILANS_2021 = "src/main/resources/templates/poreskiBilans2020.xlsx";
-	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2021 = "src/main/resources/templates/poreskiGubici2020.xls";
-	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2021 = "src/main/resources/templates/poreskiKrediti2020.xls";
-	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021 = "src/main/resources/templates/kapitalniPoreskiGubici2020.xls";
+	public static final String TEMPLATE_FILE_PORESKI_BILANS_2021 = "src/main/resources/templates/poreskiBilans2021.xls";
+	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2021 = "src/main/resources/templates/poreskiGubici2021.xls";
+	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2021 = "src/main/resources/templates/poreskiKrediti2021.xls";
+	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021 = "src/main/resources/templates/kapitalniPoreskiGubici2021.xls";
 
 	@Autowired
 	private PoreskiPodaciRepository poreskiGubiciRepository;
@@ -140,6 +140,7 @@ public class ExcelService {
 			if (year.equals("2020")) {
 				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2020));
 			} else if(year.equals("2021")) {
+				System.out.println("USAO U 2021");
 				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2021));
 			}
 			
@@ -275,6 +276,9 @@ public class ExcelService {
 		if (year.equals("2021")) {
 			System.out.println("USAO U 2021");
 			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_2021));
+		}else if (year.equals("2022")){
+			System.out.println("USAO U 2022");
+			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_2022));
 		} else {
 			System.out.println("USAO U ELSE");
 			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE));
@@ -284,80 +288,10 @@ public class ExcelService {
 
 		Row rowYear = sheet.getRow(2);
 		Cell cl = rowYear.getCell(1);
-		cl.setCellValue(year + ".godina");
+		 cl.setCellValue(year + ".godina");
 
-		if (!year.equals("2021")) {
-			for (int j = 10; j <= 31 * 4; j = j + 4) {
-				Row row2write = sheet.getRow(j);
-				Cell cellComp = row2write.getCell(1);
-				String compName = cellComp.getStringCellValue();
-
-				for (int i = 0; i < excels.size(); i++) {
-					ExcelDTO ex = excels.get(i);
-					System.out.println("COMPARING123" + ex.getCompanyName().trim() + " = " + compName.trim());
-					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
-
-						Iterator it = ex.getPdv1().entrySet().iterator();
-						while (it.hasNext()) {
-							Map.Entry pair = (Map.Entry) it.next();
-							writeToMonthCell(pair, row2write, false, null);
-						}
-					}
-				}
-			}
-
-			for (int j = 11; j <= 31 * 4; j = j + 4) {
-				Row row2write = sheet.getRow(j);
-				Row row2read = sheet.getRow(j - 1);
-				Cell cellComp = row2read.getCell(1);
-				String compName = cellComp.getStringCellValue();
-
-				for (int i = 0; i < excels.size(); i++) {
-					ExcelDTO ex = excels.get(i);
-
-					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
-
-						Iterator it = ex.getPdv2().entrySet().iterator();
-						while (it.hasNext()) {
-							Map.Entry pair = (Map.Entry) it.next();
-
-							writeToMonthCell(pair, row2write, false, null);
-						}
-					}
-				}
-			}
-
-			for (int j = 12; j <= 31 * 4; j = j + 4) {
-				Row row2write = sheet.getRow(j);
-				Row row2read = sheet.getRow(j - 2);
-				Cell cellComp = row2read.getCell(1);
-				String compName = cellComp.getStringCellValue();
-
-				for (int i = 0; i < excels.size(); i++) {
-					ExcelDTO ex = excels.get(i);
-
-					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
-
-						Iterator it = ex.getListSumValues().entrySet().iterator();
-						while (it.hasNext()) {
-							Map.Entry pair = (Map.Entry) it.next();
-							Font headerFont = workbook.createFont();
-							headerFont.setColor(IndexedColors.WHITE.index);
-							CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
-							// fill foreground color ...
-							headerCellStyle.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
-							// and solid fill pattern produces solid grey cell fill
-							headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-							headerCellStyle.setFont(headerFont);
-							headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
-
-							writeToMonthCell(pair, row2write, true, headerCellStyle);
-
-						}
-					}
-				}
-			}
-		} else {
+		 if(year.equals("2021")) {
+			
 			for (int j = 10; j <= 29 * 4; j = j + 4) {
 				Row row2write = sheet.getRow(j);
 				Cell cellComp = row2write.getCell(1);
@@ -399,6 +333,149 @@ public class ExcelService {
 			}
 
 			for (int j = 12; j <= 29 * 4; j = j + 4) {
+				Row row2write = sheet.getRow(j);
+				Row row2read = sheet.getRow(j - 2);
+				Cell cellComp = row2read.getCell(1);
+				String compName = cellComp.getStringCellValue();
+
+				for (int i = 0; i < excels.size(); i++) {
+					ExcelDTO ex = excels.get(i);
+
+					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
+
+						Iterator it = ex.getListSumValues().entrySet().iterator();
+						while (it.hasNext()) {
+							Map.Entry pair = (Map.Entry) it.next();
+							Font headerFont = workbook.createFont();
+							headerFont.setColor(IndexedColors.WHITE.index);
+							CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
+							// fill foreground color ...
+							headerCellStyle.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+							// and solid fill pattern produces solid grey cell fill
+							headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+							headerCellStyle.setFont(headerFont);
+							headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
+
+							writeToMonthCell(pair, row2write, true, headerCellStyle);
+
+						}
+					}
+				}
+			}
+		} else if (year.equals("2022")) {
+			for (int j = 10; j <= 84; j = j + 4) {
+				Row row2write = sheet.getRow(j);
+				Cell cellComp = row2write.getCell(1);
+				String compName = cellComp.getStringCellValue();
+
+				for (int i = 0; i < excels.size(); i++) {
+					ExcelDTO ex = excels.get(i);
+					System.out.println("COMPARING123" + ex.getCompanyName().trim() + " = " + compName.trim());
+					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
+
+						Iterator it = ex.getPdv1().entrySet().iterator();
+						while (it.hasNext()) {
+							Map.Entry pair = (Map.Entry) it.next();
+							writeToMonthCell(pair, row2write, false, null);
+						}
+					}
+				}
+			}
+
+			for (int j = 11; j <= 84; j = j + 4) {
+				Row row2write = sheet.getRow(j);
+				Row row2read = sheet.getRow(j - 1);
+				Cell cellComp = row2read.getCell(1);
+				String compName = cellComp.getStringCellValue();
+
+				for (int i = 0; i < excels.size(); i++) {
+					ExcelDTO ex = excels.get(i);
+
+					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
+
+						Iterator it = ex.getPdv2().entrySet().iterator();
+						while (it.hasNext()) {
+							Map.Entry pair = (Map.Entry) it.next();
+
+							writeToMonthCell(pair, row2write, false, null);
+						}
+					}
+				}
+			}
+
+			for (int j = 12; j <= 84; j = j + 4) {
+				Row row2write = sheet.getRow(j);
+				Row row2read = sheet.getRow(j - 2);
+				Cell cellComp = row2read.getCell(1);
+				String compName = cellComp.getStringCellValue();
+
+				for (int i = 0; i < excels.size(); i++) {
+					ExcelDTO ex = excels.get(i);
+
+					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
+
+						Iterator it = ex.getListSumValues().entrySet().iterator();
+						while (it.hasNext()) {
+							Map.Entry pair = (Map.Entry) it.next();
+							Font headerFont = workbook.createFont();
+							headerFont.setColor(IndexedColors.WHITE.index);
+							CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
+							// fill foreground color ...
+							headerCellStyle.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+							// and solid fill pattern produces solid grey cell fill
+							headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+							headerCellStyle.setFont(headerFont);
+							headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
+
+							writeToMonthCell(pair, row2write, true, headerCellStyle);
+
+						}
+					}
+				}
+			}
+		} else {
+			
+			for (int j = 10; j <= 31 * 4; j = j + 4) {
+				Row row2write = sheet.getRow(j);
+				Cell cellComp = row2write.getCell(1);
+				String compName = cellComp.getStringCellValue();
+
+				for (int i = 0; i < excels.size(); i++) {
+					ExcelDTO ex = excels.get(i);
+					System.out.println("COMPARING123" + ex.getCompanyName().trim() + " = " + compName.trim());
+					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
+
+						Iterator it = ex.getPdv1().entrySet().iterator();
+						while (it.hasNext()) {
+							Map.Entry pair = (Map.Entry) it.next();
+							writeToMonthCell(pair, row2write, false, null);
+						}
+					}
+				}
+			}
+
+			for (int j = 11; j <= 31 * 4; j = j + 4) {
+				Row row2write = sheet.getRow(j);
+				Row row2read = sheet.getRow(j - 1);
+				Cell cellComp = row2read.getCell(1);
+				String compName = cellComp.getStringCellValue();
+
+				for (int i = 0; i < excels.size(); i++) {
+					ExcelDTO ex = excels.get(i);
+
+					if (ex.getCompanyName().toLowerCase().trim().equals(compName.toLowerCase().trim())) {
+
+						Iterator it = ex.getPdv2().entrySet().iterator();
+						while (it.hasNext()) {
+							Map.Entry pair = (Map.Entry) it.next();
+
+							writeToMonthCell(pair, row2write, false, null);
+						}
+					}
+				}
+			}
+
+			for (int j = 12; j <= 31 * 4; j = j + 4) {
 				Row row2write = sheet.getRow(j);
 				Row row2read = sheet.getRow(j - 2);
 				Cell cellComp = row2read.getCell(1);
@@ -758,18 +835,34 @@ public class ExcelService {
 
 			}
 
-		} else if(year.equals("2020")) {
+		} else {
 			cells = 34;
 			rows = 0;
 			if (type.equals(PoreskiIzvestajType.PORESKI_GUBICI)) {
 				rows = 12;
-				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_GUBICI_2020));
+				if(year.equals("2020")) {
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_GUBICI_2020));
+				} else if(year.equals("2021")) {
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_GUBICI_2021));
+				}
+				
 			} else if (type.equals(PoreskiIzvestajType.PORESKI_KREDITI)) {
-				rows = 10;
-				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_KREDITI_2020));
+				if(year.equals("2020")) {
+					rows = 10;
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_KREDITI_2020));
+				} else if(year.equals("2021")) {
+					rows = 9;
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_KREDITI_2021));
+				}
+				
 			} else {
 				rows = 12;
-				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2020));
+				if(year.equals("2020")) {
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2020));
+				} else if (year.equals("2021")) {
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021));
+				}
+				
 			}
 
 			sheet = workbook.getSheetAt(0);
@@ -790,7 +883,10 @@ public class ExcelService {
 					for (PoreskiPodaci dto : valuesToFill) {
 						if (dto.getId().getCompanyName().trim().equals(compName.trim())) {
 							if(i != rows && i != rows - 1) {
-								if(sheet.getRow(i).getCell(1) != null) {
+								System.out.println(compName);
+								System.out.println(sheet.getRow(2));
+								System.out.println(sheet.getRow(i));
+								if(sheet.getRow(i) != null && sheet.getRow(i).getCell(1) != null) {
 									if (sheet.getRow(i).getCell(1).getCellType() == 0) {
 										Double yearsDouble = sheet.getRow(i).getCell(1).getNumericCellValue();
 										yearsPeriod = yearsDouble.toString().split("\\.")[0];
@@ -816,11 +912,23 @@ public class ExcelService {
 								System.out.println("COMPANY NAME " + compName.trim());
 								Long sumValue = 0L;
 								if(type.equals(PoreskiIzvestajType.PORESKI_GUBICI) || type.equals(PoreskiIzvestajType.KAPITALNI_PORESKI_GUBICI)) {
-									sumValue = poreskiGubiciRepository.getSumValuePerCompanyForLastDayOn2020PG(
-											type.ordinal(), compName.trim()).orElse(0L);
+									if(year.equals("2020")) {
+										sumValue = poreskiGubiciRepository.getSumValuePerCompanyForLastDayOn2020PG(
+												type.ordinal(), compName.trim()).orElse(0L); // "Ukupno na dan 31.12.2020. (sa 2015./bez 2020.)
+									} else if (year.equals("2021")) {
+										sumValue = poreskiGubiciRepository.getSumValuePerCompanyForLastDayOn2021PG(
+												type.ordinal(), compName.trim()).orElse(0L); // "Ukupno na dan 31.12.2021. (sa 2016./bez 2021.)
+									}
+									
 								} else if (type.equals(PoreskiIzvestajType.PORESKI_KREDITI)) {
-									sumValue = poreskiGubiciRepository.getSumValuePerCompanyForLastDayOn2020PK(
-											type.ordinal(), compName.trim()).orElse(0L);
+									if(year.equals("2020")) {
+										sumValue = poreskiGubiciRepository.getSumValuePerCompanyForLastDayOn2020PK(
+												type.ordinal(), compName.trim()).orElse(0L);
+									} else if (year.equals("2021")) {
+										sumValue = poreskiGubiciRepository.getSumValuePerCompanyForLastDayOn2021PK(
+												type.ordinal(), compName.trim()).orElse(0L);
+									}
+									
 								}
 								
 								if (sumValue == null) {
@@ -839,8 +947,15 @@ public class ExcelService {
 								// get sum value for a company
 								System.out.println("TYPE " + type.ordinal());
 								System.out.println("COMPANY NAME " + compName.trim());
-								Long sumValue = poreskiGubiciRepository.getSumValueToUsePerCompany(type.ordinal(),
-										compName.trim()).orElse(0L);
+								Long sumValue = 0L;
+								if(year.equals("2021")) {
+									sumValue = poreskiGubiciRepository.getSumValueToUsePerCompany2021(type.ordinal(),
+											compName.trim()).orElse(0L);
+								} else {
+									sumValue = poreskiGubiciRepository.getSumValueToUsePerCompany(type.ordinal(),
+											compName.trim()).orElse(0L);
+								}
+								
 								if (sumValue == null) {
 									cell2write.setCellValue(0);
 								} else {
@@ -879,12 +994,22 @@ public class ExcelService {
 						sumValueToUse += sumValue;
 					}
 				} else if (type.equals(PoreskiIzvestajType.PORESKI_KREDITI)) {
-					if(r >= 5 && r <= 8) {
-						sumValueForLastDayOn2020 += sumValue;
+					if(year.equals("2021")) {
+						if(r >= 5 && r <= 7) {
+							sumValueForLastDayOn2020 += sumValue;
+						}
+						if(r >=6 && r <= 7) {
+							sumValueToUse += sumValue;
+						}
+					} else {
+						if(r >= 5 && r <= 8) {
+							sumValueForLastDayOn2020 += sumValue;
+						}
+						if(r >=6 && r <= 8) {
+							sumValueToUse += sumValue;
+						}
 					}
-					if(r >=6 && r <= 8) {
-						sumValueToUse += sumValue;
-					}
+				
 				}
 				
 
@@ -903,14 +1028,28 @@ public class ExcelService {
 				
 			} else if (type.equals(PoreskiIzvestajType.PORESKI_KREDITI)) {
 				// time to write into cell "Ukupno na dan 31.12.2020."
-				Row toWriteRow = sheet.getRow(9);
-				Cell toWriteCell = toWriteRow.getCell(3);
-				toWriteCell.setCellValue(sumValueForLastDayOn2020);
+				if(year.equals("2021")) {
+					Row toWriteRow = sheet.getRow(8);
+					Cell toWriteCell = toWriteRow.getCell(3);
+					toWriteCell.setCellValue(sumValueForLastDayOn2020);
+					
+					// time to write into cell "Ukupno za koriscenje od 2021. god (bez 2010./sa 2020.)"
+					Row toWriteRow2 = sheet.getRow(9);
+					Cell toWriteCell2 = toWriteRow2.getCell(3);
+					toWriteCell2.setCellValue(sumValueToUse);
+				} else {
+					Row toWriteRow = sheet.getRow(9);
+					Cell toWriteCell = toWriteRow.getCell(3);
+					toWriteCell.setCellValue(sumValueForLastDayOn2020);
+					
+					// time to write into cell "Ukupno za koriscenje od 2021. god (bez 2010./sa 2020.)"
+					Row toWriteRow2 = sheet.getRow(10);
+					Cell toWriteCell2 = toWriteRow2.getCell(3);
+					toWriteCell2.setCellValue(sumValueToUse);
+				}
 				
-				// time to write into cell "Ukupno za koriscenje od 2021. god (bez 2010./sa 2020.)"
-				Row toWriteRow2 = sheet.getRow(10);
-				Cell toWriteCell2 = toWriteRow2.getCell(3);
-				toWriteCell2.setCellValue(sumValueToUse);
+				
+				
 			}
 			
 		}

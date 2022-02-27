@@ -1,43 +1,57 @@
-<app-navigation>
+<app-navigation> </app-navigation>
 
-</app-navigation>
-
-<div style="width: 30%;" class="ml-4" class="forma">
-    <div class="form-group">
-        <label for="">Godina</label>
-        <select (change)="onChangeGodina($event.target.value)" name="" id="" class="form-control" [formControl]="year">
-            <option value="2021" class="form-control">2021</option>
-            <option value="2020" class="form-control">2020</option>
-            <option value="2019" class="form-control">2019</option>
-        </select>
-    </div>
-    <div class="form-group" *ngIf="!poreskiHide && !onlyPDV">
-        <label for="">Tip</label>
-        <select id="" class="form-control" [formControl]="type">
-            <option value="PDV" class="form-control">PDV</option>
-            <option value="drugo"  class="form-control">Poreski bilans</option>
-            <option value="PORESKI_GUBICI" class="form-control">Poreski gubici</option>
-            <option value="KAPITALNI_PORESKI_GUBICI" class="form-control">Kapitalni poreski gubici</option>
-            <option value="PORESKI_KREDITI" class="form-control">Poreski krediti</option>
-        </select>
-    </div>
-    <div class="form-group" *ngIf="poreskiHide && !onlyPDV"> <!-- 2018 ili 2017 je odabrano -->
-        <label for="">Tip</label>
-        <select  id="" class="form-control" [formControl]="type">
-            <option value="PDV" class="form-control">PDV</option>
-        </select>
-    </div>
-    <div class="form-group" *ngIf="onlyPDV"> <!-- 2018 ili 2017 je odabrano -->
-        <label for="">Tip</label>
-        <select  id="" class="form-control" [formControl]="type">
-            <option value="PDV" class="form-control">PDV</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <p *ngIf="msg" style="color: red">{{ msgText }}</p>
-    </div>
-    <div class="form-group" style="text-align: center; margin: 0 auto">
-        <button class="btn btn-info" (click)="download()">Preuzimanje izveštaja</button>
-    </div>
-    
+<div style="width: 30%" class="ml-4" class="forma">
+  <div class="form-group">
+    <label for="">Godina</label>
+    <select
+      (change)="onChangeGodina($event.target.value)"
+      name=""
+      id=""
+      class="form-control"
+      [formControl]="year"
+    >
+      <option value="2022" class="form-control">2022</option>
+      <option value="2021" class="form-control">2021</option>
+      <option value="2020" class="form-control">2020</option>
+      <option value="2019" class="form-control">2019</option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="!poreskiHide && !onlyPDV">
+    <label for="">Tip</label>
+    <select id="" class="form-control" [formControl]="type">
+      <option value="PDV" class="form-control">PDV</option>
+      <option value="drugo" class="form-control">Poreski bilans</option>
+      <option value="PORESKI_GUBICI" class="form-control">
+        Poreski gubici
+      </option>
+      <option value="KAPITALNI_PORESKI_GUBICI" class="form-control">
+        Kapitalni poreski gubici
+      </option>
+      <option value="PORESKI_KREDITI" class="form-control">
+        Poreski krediti
+      </option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="poreskiHide && !onlyPDV">
+    <!-- 2018 ili 2017 je odabrano -->
+    <label for="">Tip</label>
+    <select id="" class="form-control" [formControl]="type">
+      <option value="PDV" class="form-control">PDV</option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="onlyPDV">
+    <!-- 2018 ili 2017 je odabrano -->
+    <label for="">Tip</label>
+    <select id="" class="form-control" [formControl]="type">
+      <option value="PDV" class="form-control">PDV</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <p *ngIf="msg" style="color: red">{{ msgText }}</p>
+  </div>
+  <div class="form-group" style="text-align: center; margin: 0 auto">
+    <button class="btn btn-info" (click)="download()">
+      Preuzimanje izveštaja
+    </button>
+  </div>
 </div>
