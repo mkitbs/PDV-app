@@ -42,6 +42,7 @@ public class ExcelService {
 
 	public static final String TEMPLATE_FILE = "src/main/resources/templates/template123.xls";
 	public static final String TEMPLATE_FILE_2021 = "src/main/resources/templates/template1232021.xls";
+	public static final String TEMPLATE_FILE_2022 = "src/main/resources/templates/template1232021.xls";
 	public static final String TEMPLATE_FILE_TROSKOVI = "src/main/resources/templates/template123troskovi.xls";
 	public static final String TEMPLATE_FILE_PORESKI_GUBICI = "src/main/resources/templates/poreskigubici.xls";
 	public static final String TEMPLATE_FILE_PORESKI_KREDITI = "src/main/resources/templates/poreskikrediti.xls";
@@ -50,6 +51,10 @@ public class ExcelService {
 	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2020 = "src/main/resources/templates/poreskiGubici2020.xls";
 	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2020 = "src/main/resources/templates/poreskiKrediti2020.xls";
 	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2020 = "src/main/resources/templates/kapitalniPoreskiGubici2020.xls";
+	public static final String TEMPLATE_FILE_PORESKI_BILANS_2021 = "src/main/resources/templates/poreskiBilans2020.xlsx";
+	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2021 = "src/main/resources/templates/poreskiGubici2020.xls";
+	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2021 = "src/main/resources/templates/poreskiKrediti2020.xls";
+	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021 = "src/main/resources/templates/kapitalniPoreskiGubici2020.xls";
 
 	@Autowired
 	private PoreskiPodaciRepository poreskiGubiciRepository;
@@ -130,8 +135,14 @@ public class ExcelService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (year.equals("2020")) {
-			Workbook workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2020));
+		} else {
+			Workbook workbook = null;
+			if (year.equals("2020")) {
+				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2020));
+			} else if(year.equals("2021")) {
+				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2021));
+			}
+			
 			Sheet sheet = workbook.getSheetAt(0);
 			/*
 			 * for (Row myrow : sheet) {
