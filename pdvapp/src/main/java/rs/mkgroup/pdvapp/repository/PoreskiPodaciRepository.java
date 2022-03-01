@@ -33,10 +33,19 @@ public interface PoreskiPodaciRepository extends JpaRepository<PoreskiPodaci, Po
 
 	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2025' and years_period not like '%2019' and company_name=?2", nativeQuery = true)
 	Optional<Long> getSumValuePerCompanyForLastDayOn2020PG(int ordinal, String company);
+	
+	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2026' and years_period not like '%2020' and years_period not like '%2019' and company_name=?2", nativeQuery = true)
+	Optional<Long> getSumValuePerCompanyForLastDayOn2021PG(int ordinal, String company);
 
 	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2020' and years_period not like '%2019' and company_name=?2", nativeQuery = true)
 	Optional<Long> getSumValueToUsePerCompany(int ordinal, String company);
+	
+	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2021' and years_period not like '%2020' and years_period not like '%2019' and company_name=?2", nativeQuery = true)
+	Optional<Long> getSumValueToUsePerCompany2021(int ordinal, String company);
 
 	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2019' and company_name=?2", nativeQuery = true)
 	Optional<Long> getSumValuePerCompanyForLastDayOn2020PK(int ordinal, String company);
+	
+	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2019' and years_period not like '%2020' and company_name=?2", nativeQuery = true)
+	Optional<Long> getSumValuePerCompanyForLastDayOn2021PK(int ordinal, String company);
 }
