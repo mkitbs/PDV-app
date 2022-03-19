@@ -3,10 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {   
-  //authURL: "/pdv/api/auth/",//produkcija
-  //pdvURL: "/pdv/pdv/",//produkcija
-  authURL: "http://localhost:8087/api/auth/", //test
-  pdvURL: "http://localhost:8087/pdv/", //test
+  authURL: "/pdv/api/auth/",//produkcija
+  pdvURL: "/pdv/pdv/",//produkcija
+  //authURL: "http://localhost:8087/api/auth/", //test
+  //pdvURL: "http://localhost:8087/pdv/", //test
   production: false
 };
 
