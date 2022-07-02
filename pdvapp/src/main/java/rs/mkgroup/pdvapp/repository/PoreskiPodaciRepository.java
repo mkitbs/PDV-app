@@ -28,8 +28,20 @@ public interface PoreskiPodaciRepository extends JpaRepository<PoreskiPodaci, Po
 	@Query(value = "select sum(value) from poreski_podaci where type = ?1 and company_name = ?2 and years_period NOT LIKE '%2019'", nativeQuery = true)
 	Long getSumValueForCompany2020(Integer type, String companyName);
 
-	@Query(value = "select sum(value) from poreski_podaci where type=:type and years_period LIKE %:yearsPeriod", nativeQuery = true)
-	Optional<Long> getSumValueForType(@Param("type") Integer type, String yearsPeriod);
+	@Query(value = "select sum(value) from poreski_podaci where type=:type and years_period LIKE %:yearsPeriod and company_name != \"Adeyemy\" and company_name != \"Carnex Stočarstvo doo Bečej\" \r\n"
+			+ "and company_name != \"Carnex Veterina Veterinarska služba doo Bečej\" and company_name != \"Ivicom\" and company_name != \"MK Aviation Services\" and company_name != \"MK Fintel Wind Develop.\" \r\n"
+			+ "and company_name != \"Vetropark Kula - pridruženo\"", nativeQuery = true)
+	Optional<Long> getSumValueForType2019(@Param("type") Integer type, String yearsPeriod);
+	
+	@Query(value = "select sum(value) from poreski_podaci where type=:type and years_period LIKE %:yearsPeriod and company_name != \"Adeyemy\" and company_name != \"Ivicom\" \r\n"
+			+ "and company_name != \"MK Aviation Services\" and company_name != \"MK Fintel Wind Develop.\" and company_name != \"Vetropark Kula - pridruženo\"", nativeQuery = true)
+	Optional<Long> getSumValueForType2020(@Param("type") Integer type, String yearsPeriod);
+	
+	@Query(value = "select sum(value) from poreski_podaci where type=:type and years_period LIKE %:yearsPeriod and company_name != \"Agroglobe d.o.o., Novi Sad\" and company_name != \"AIK banka a.d.\" \r\n"
+			+ "and company_name != \"Banat Seme d.o.o., Zrenjanin\" and company_name != \"Carnex Holding\" and company_name != \"Carnex Veterina Veterinarska služba doo Bečej\" \r\n"
+			+ "and company_name != \"Granexport ad, Pančevo\" and company_name != \"MK Aviation Services\" and company_name != \"MK Fintel Wind Develop.\"\r\n"
+			+ " and company_name != \"Sojaprotein\" and company_name != \"Veterinarska stanica Carnex Farm\" and company_name != \"Vetropark Kula - pridruženo\" and company_name != \"Žito Bačka doo, Kula\"", nativeQuery = true)
+	Optional<Long> getSumValueForType2021(@Param("type") Integer type, String yearsPeriod);
 
 	@Query(value = "SELECT sum(value) FROM poreski_podaci where type=?1 and years_period not like '%2025' and years_period not like '%2019' and company_name=?2", nativeQuery = true)
 	Optional<Long> getSumValuePerCompanyForLastDayOn2020PG(int ordinal, String company);

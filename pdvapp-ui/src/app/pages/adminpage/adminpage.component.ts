@@ -29,8 +29,8 @@ export class AdminpageComponent implements OnInit {
       localStorage['user'] != 'abijelic' &&
       localStorage['user'] != 'andrija'
     ) {
-      this.router.navigate(['unauthorized']);
-      //this.router.navigate(['admin']);
+      //this.router.navigate(['unauthorized']);
+      this.router.navigate(['admin']);
       return;
     }
     this.httpC.get(environment.authURL + 'getLogged').subscribe(
@@ -43,8 +43,8 @@ export class AdminpageComponent implements OnInit {
           this.user.email != 'abijelic' &&
           this.user.email != 'andrija'
         ) {
-          this.router.navigate(['unauthorized']);
-          //this.router.navigate(['admin']);
+          //this.router.navigate(['unauthorized']);
+          this.router.navigate(['admin']);
           return;
         }
       },

@@ -42,7 +42,8 @@ public class ExcelService {
 
 	public static final String TEMPLATE_FILE = "src/main/resources/templates/template123.xls";
 	public static final String TEMPLATE_FILE_2021 = "src/main/resources/templates/template1232021.xls";
-	public static final String TEMPLATE_FILE_2022 = "src/main/resources/templates/template1232022.xls";
+	//public static final String TEMPLATE_FILE_2022 = "src/main/resources/templates/template1232022.xls";
+	public static final String TEMPLATE_FILE_2022_UPDATED = "src/main/resources/templates/pdv2022Updated.xls";
 	public static final String TEMPLATE_FILE_TROSKOVI = "src/main/resources/templates/template123troskovi.xls";
 	public static final String TEMPLATE_FILE_PORESKI_GUBICI = "src/main/resources/templates/poreskigubici.xls";
 	public static final String TEMPLATE_FILE_PORESKI_KREDITI = "src/main/resources/templates/poreskikrediti.xls";
@@ -51,11 +52,15 @@ public class ExcelService {
 	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2020 = "src/main/resources/templates/poreskiGubici2020.xls";
 	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2020 = "src/main/resources/templates/poreskiKrediti2020.xls";
 	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2020 = "src/main/resources/templates/kapitalniPoreskiGubici2020.xls";
-	public static final String TEMPLATE_FILE_PORESKI_BILANS_2021 = "src/main/resources/templates/poreskiBilans2021.xls";
-	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2021 = "src/main/resources/templates/poreskiGubici2021.xls";
-	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2021 = "src/main/resources/templates/poreskiKrediti2021.xls";
-	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021 = "src/main/resources/templates/kapitalniPoreskiGubici2021.xls";
-
+	//public static final String TEMPLATE_FILE_PORESKI_BILANS_2021 = "src/main/resources/templates/poreskiBilans2021.xls";
+	public static final String TEMPLATE_FILE_PORESKI_BILANS_2021_UPDATED = "src/main/resources/templates/PoreskiBilans2021Updated.xls";
+	//public static final String TEMPLATE_FILE_PORESKI_GUBICI_2021 = "src/main/resources/templates/poreskiGubici2021.xls";
+	public static final String TEMPLATE_FILE_PORESKI_GUBICI_2021_UPDATED = "src/main/resources/templates/poreskiGubici2021Updated.xls";
+	//public static final String TEMPLATE_FILE_PORESKI_KREDITI_2021 = "src/main/resources/templates/poreskiKrediti2021.xls";
+	public static final String TEMPLATE_FILE_PORESKI_KREDITI_2021_UPDATED = "src/main/resources/templates/poreskiKrediti2021Updated.xls";
+	//public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021 = "src/main/resources/templates/kapitalniPoreskiGubici2021.xls";
+	public static final String TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021_UPDATED = "src/main/resources/templates/kapitalniPoreskiGubici2021Updated.xls";
+	
 	@Autowired
 	private PoreskiPodaciRepository poreskiGubiciRepository;
 	
@@ -137,11 +142,14 @@ public class ExcelService {
 			}
 		} else {
 			Workbook workbook = null;
+			int cells = 0;
 			if (year.equals("2020")) {
 				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2020));
+				cells = 34;
 			} else if(year.equals("2021")) {
 				System.out.println("USAO U 2021");
-				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2021));
+				workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_BILANS_2021_UPDATED));
+				cells = 27;
 			}
 			
 			Sheet sheet = workbook.getSheetAt(0);
@@ -152,7 +160,7 @@ public class ExcelService {
 			 * //if(cell.getRowIndex() ==9 && cell.getColumnIndex() == 4) { //
 			 * cell.setCellValue("nemanja dimsic"); //} } }
 			 */
-			for (int x = 4; x < 34; x++) { // cells
+			for (int x = 4; x < cells; x++) { // cells
 				for (int i = 11; i <= 91; i++) { // rows
 					Row ofComp = sheet.getRow(8);
 					Cell ofCompCell = ofComp.getCell(x);
@@ -196,6 +204,8 @@ public class ExcelService {
 				}
 			}
 			Long inid = 1L;
+			
+			
 			// time to write sum of sums
 			for (int r = 11; r <= 91; r++) {
 
@@ -207,7 +217,14 @@ public class ExcelService {
 				if(cl != null && !cl.getStringCellValue().isEmpty()) {
 					if(inid <= 69) {
 						// get sum value 
-						Long sumValue = fieldRepository.getSumValue(year, inid).orElse(0L);
+						Long sumValue = 0L;
+						if(year.equals("2019")) {
+							sumValue = fieldRepository.getSumValue2019(year, inid).orElse(0L);
+						} else if (year.equals("2020")) {
+							sumValue = fieldRepository.getSumValue2020(year, inid).orElse(0L);
+						} else if (year.equals("2021")) {
+							sumValue = fieldRepository.getSumValue2021(year, inid).orElse(0L);
+						}
 						// set sum value
 						toWriteCell.setCellValue(sumValue);
 						//increase inid
@@ -278,7 +295,7 @@ public class ExcelService {
 			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_2021));
 		}else if (year.equals("2022")){
 			System.out.println("USAO U 2022");
-			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_2022));
+			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_2022_UPDATED));
 		} else {
 			System.out.println("USAO U ELSE");
 			workbook = WorkbookFactory.create(new File(TEMPLATE_FILE));
@@ -363,7 +380,7 @@ public class ExcelService {
 				}
 			}
 		} else if (year.equals("2022")) {
-			for (int j = 10; j <= 84; j = j + 4) {
+			for (int j = 11; j <= 101; j = j + 4) {
 				Row row2write = sheet.getRow(j);
 				Cell cellComp = row2write.getCell(1);
 				String compName = cellComp.getStringCellValue();
@@ -382,7 +399,7 @@ public class ExcelService {
 				}
 			}
 
-			for (int j = 11; j <= 84; j = j + 4) {
+			for (int j = 12; j <= 101; j = j + 4) {
 				Row row2write = sheet.getRow(j);
 				Row row2read = sheet.getRow(j - 1);
 				Cell cellComp = row2read.getCell(1);
@@ -403,7 +420,7 @@ public class ExcelService {
 				}
 			}
 
-			for (int j = 12; j <= 84; j = j + 4) {
+			for (int j = 13; j <= 101; j = j + 4) {
 				Row row2write = sheet.getRow(j);
 				Row row2read = sheet.getRow(j - 2);
 				Cell cellComp = row2read.getCell(1);
@@ -417,17 +434,17 @@ public class ExcelService {
 						Iterator it = ex.getListSumValues().entrySet().iterator();
 						while (it.hasNext()) {
 							Map.Entry pair = (Map.Entry) it.next();
-							Font headerFont = workbook.createFont();
-							headerFont.setColor(IndexedColors.WHITE.index);
+							//Font headerFont = workbook.createFont();
+							//headerFont.setColor(IndexedColors.WHITE.index);
 							CellStyle headerCellStyle = sheet.getWorkbook().createCellStyle();
 							// fill foreground color ...
-							headerCellStyle.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+							//headerCellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
 							// and solid fill pattern produces solid grey cell fill
-							headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-							headerCellStyle.setFont(headerFont);
+							//headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+							//headerCellStyle.setFont(headerFont);
 							headerCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0.00"));
 
-							writeToMonthCell(pair, row2write, true, headerCellStyle);
+							writeToMonthCell(pair, row2write, false, headerCellStyle);
 
 						}
 					}
@@ -818,7 +835,7 @@ public class ExcelService {
 				// get sum value for a year period
 				
 				Long sumValue = poreskiGubiciRepository
-						.getSumValueForType(type.ordinal(), ((Double) cellOfYear.getNumericCellValue()).toString().split("\\.")[0]).orElse(0L);
+						.getSumValueForType2019(type.ordinal(), ((Double) cellOfYear.getNumericCellValue()).toString().split("\\.")[0]).orElse(0L);
 				if (r != rows) {
 					if(!((Double) cellOfYear.getNumericCellValue()).toString().split("\\.")[0].equals("2019")) {
 						listOfSums.add(sumValue);
@@ -836,31 +853,39 @@ public class ExcelService {
 			}
 
 		} else {
-			cells = 34;
+			cells = 0;
 			rows = 0;
 			if (type.equals(PoreskiIzvestajType.PORESKI_GUBICI)) {
 				rows = 12;
 				if(year.equals("2020")) {
+					cells = 34;
 					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_GUBICI_2020));
 				} else if(year.equals("2021")) {
-					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_GUBICI_2021));
+					cells = 27;
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_GUBICI_2021_UPDATED));
 				}
 				
 			} else if (type.equals(PoreskiIzvestajType.PORESKI_KREDITI)) {
+				
 				if(year.equals("2020")) {
 					rows = 10;
+					cells = 34;
 					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_KREDITI_2020));
 				} else if(year.equals("2021")) {
 					rows = 9;
-					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_KREDITI_2021));
+					cells = 27;
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_PORESKI_KREDITI_2021_UPDATED));
 				}
 				
 			} else {
+				
 				rows = 12;
 				if(year.equals("2020")) {
+					cells = 34;
 					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2020));
 				} else if (year.equals("2021")) {
-					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021));
+					cells = 27;
+					workbook = WorkbookFactory.create(new File(TEMPLATE_FILE_KAPITALNI_PORESKI_GUBICI_2021_UPDATED));
 				}
 				
 			}
@@ -981,9 +1006,14 @@ public class ExcelService {
 				Cell cellOfYear = toWriteRow.getCell(2);
 
 				// get sum value for a year period
-				
-				Long sumValue = poreskiGubiciRepository
-						.getSumValueForType(type.ordinal(), ((Double) cellOfYear.getNumericCellValue()).toString().split("\\.")[0]).orElse(0L);
+				Long sumValue = 0L;
+				if(year.equals("2020")) {
+					sumValue = poreskiGubiciRepository
+							.getSumValueForType2020(type.ordinal(), ((Double) cellOfYear.getNumericCellValue()).toString().split("\\.")[0]).orElse(0L);
+				} else if (year.equals("2021")) {
+					sumValue = poreskiGubiciRepository
+							.getSumValueForType2021(type.ordinal(), ((Double) cellOfYear.getNumericCellValue()).toString().split("\\.")[0]).orElse(0L);
+				}
 				
 				toWriteCell.setCellValue(sumValue);
 				if (type.equals(PoreskiIzvestajType.PORESKI_GUBICI) || type.equals(PoreskiIzvestajType.KAPITALNI_PORESKI_GUBICI)) {
