@@ -30,7 +30,7 @@ export class NavigationComponent implements OnInit {
     ) {
       this.abijelic = true;
     } else {
-      this.abijelic = true;
+      this.abijelic = false;
     }
   }
 
