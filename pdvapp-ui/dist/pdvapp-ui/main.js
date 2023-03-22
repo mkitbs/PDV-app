@@ -4284,13 +4284,15 @@ class NavigationComponent {
         this.abijelic = false;
     }
     ngOnInit() {
-        if (localStorage["user"] == null || localStorage["user"] == undefined) {
+        if (localStorage['user'] == null || localStorage['user'] == undefined) {
             localStorage.clear();
-            this.toastr.error("Molimo Vas da izvšite prijavu.");
+            this.toastr.error('Molimo Vas da izvšite prijavu.');
             this.router.navigate(['login']);
             return;
         }
-        if (localStorage["user"] == "abijelic" || localStorage["user"] == "olivera") {
+        if (localStorage['user'] == 'abijelic' ||
+            localStorage['user'] == 'olivera' ||
+            localStorage['user'] == 'andrija') {
             this.abijelic = true;
         }
         else {
@@ -4298,7 +4300,7 @@ class NavigationComponent {
         }
     }
     pocetna() {
-        if (window.location.hash == "#/home") {
+        if (window.location.hash == '#/home') {
             window.location.reload();
             return;
         }
@@ -4309,7 +4311,7 @@ class NavigationComponent {
     }
     logout() {
         localStorage.clear();
-        this.httpC.get(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].authURL + 'signout').subscribe(data => {
+        this.httpC.get(src_environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].authURL + 'signout').subscribe((data) => {
             this.router.navigate(['login']);
         });
     }
@@ -4342,7 +4344,7 @@ NavigationComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefi
         args: [{
                 selector: 'app-navigation',
                 templateUrl: './navigation.component.html',
-                styleUrls: ['./navigation.component.css']
+                styleUrls: ['./navigation.component.css'],
             }]
     }], function () { return [{ type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }, { type: ngx_toastr__WEBPACK_IMPORTED_MODULE_3__["ToastrService"] }, { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"] }]; }, null); })();
 
